@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
-const Beer = require("./models/beerSchema");
-require("dotenv").config();
-require("./models/beerSchema");
+const express = require('express');
+const Beer = require('./models/beerSchema')
+const app = express();
 
+const bodyParser = require('body-parser'); 
+app.use(bodyParser.json()); 
+
+require("dotenv").config();
 const URI = process.env.URI;
 
 main().catch((err) => console.log(err));
-
 async function main() {
   try {
     await mongoose.connect(URI);
@@ -15,8 +18,15 @@ async function main() {
     console.error(error);
   }
 
-  const entry = new Beer({ name: 'Sierra', type: 'IPA', alcohol_content: 3});
-  entry.save(function(err){
-      if(err) return handleError(err);
+  app.post('/beers', function(req, res) {
+    const entry = new Beer(req.body)
+    console.log(entry)
+    entry.save()
+    res.send("Beer Added");
   })
 }
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Successfully served on port: ${PORT}.`);
+});
