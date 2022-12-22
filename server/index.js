@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
-const express = require('express');
-const Beer = require('./models/beerSchema')
+const express = require("express");
 const app = express();
 
-const bodyParser = require('body-parser'); 
-app.use(bodyParser.json()); 
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
 
 require("dotenv").config();
 const URI = process.env.URI;
@@ -17,14 +16,10 @@ async function main() {
   } catch (error) {
     console.error(error);
   }
-
-  app.post('/beers', function(req, res) {
-    const entry = new Beer(req.body)
-    console.log(entry)
-    entry.save()
-    res.send("Beer Added");
-  })
 }
+
+const beerRoutes = require("./routes/beers");
+app.use("/beers", beerRoutes);
 
 const PORT = 3000;
 app.listen(PORT, () => {
