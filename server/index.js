@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 require("dotenv").config();
 const URI = process.env.URI;
 
+mongoose.set("strictQuery", true);
 main().catch((err) => console.log(err));
 async function main() {
   try {
@@ -21,7 +22,7 @@ async function main() {
 const beerRoutes = require("./routes/beers");
 app.use("/beers", beerRoutes);
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Successfully served on port: ${PORT}.`);
 });
